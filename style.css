@@ -1,0 +1,39 @@
+#product-container {
+    display: grid;
+    grid-template-rows: 350px;
+    grid-template-columns: 350px 350px 350px;
+    margin-bottom: 30px;;
+    width: 1050px;
+}
+
+img {
+    height: 350px;
+    width: 350px;
+    border: thin solid yellowgreen;
+}
+
+header {
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    color: yellowgreen;
+}
+
+#results {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+button {
+    font-size: 30px;
+    color: yellowgreen;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
