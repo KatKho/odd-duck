@@ -9,7 +9,7 @@ const productContainer = document.getElementById('product-container');
 const resultsElement = document.getElementById('results');
 
 let roundCount = 0;
-const maxRounds = 3;
+const maxRounds = 25;
 
 function Product(name, src) {
     this.name = name;
@@ -46,7 +46,7 @@ function displayRandomProducts() {
     let randomGoatIndex1 = Math.floor(Math.random() * products.length);
     let randomGoatIndex2 = Math.floor(Math.random() * products.length);
     let randomGoatIndex3 = Math.floor(Math.random() * products.length);
-  
+
     while(randomGoatIndex1 === randomGoatIndex2 || randomGoatIndex1 === randomGoatIndex3 || randomGoatIndex2 === randomGoatIndex3) {
       randomGoatIndex2 = Math.floor(Math.random() * products.length);
       randomGoatIndex3 = Math.floor(Math.random() * products.length);
@@ -71,7 +71,6 @@ function displayRandomProducts() {
   }
 
 function handleProductClicks(event) {
-    // console.log(event.target.alt);
     for (let i = 0; i < products.length; i++) {
       if (products[i].name === event.target.alt) {
         products[i].timesClicked++;
