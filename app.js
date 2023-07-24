@@ -85,7 +85,7 @@ function viewResults() {
     let listElement = document.createElement('ul');
 
     for (let i = 0; i < products.length; i++) {
-     createHTML('li', products[i].name + ' had ' + products[i].timesClicked + ' votes, and was seen ' + products[i].timesSeen + ' times.', resultsElement);
+     createHTML('li', products[i].name + ' had ' + products[i].timesClicked + ' votes, and was seen ' + products[i].timesSeen + ' times', listElement);
     }
     resultsElement.appendChild(listElement);
 }
