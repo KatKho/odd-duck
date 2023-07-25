@@ -6,8 +6,12 @@ const image1Element = document.getElementById('image1');
 const image2Element = document.getElementById('image2');
 const image3Element = document.getElementById('image3');
 const productContainer = document.getElementById('product-container');
-const resultsElement = document.getElementById('results');
+const chartCanvas = document.getElementById('myChart');
+const chartButton = document.getElementById('view-results');
+const chartContainer = document.getElementById('chart-container');
 
+
+let randomIndex = [];
 let roundCount = 0;
 const maxRounds = 25;
 let buttonClicked = false;
@@ -43,33 +47,42 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 displayRandomProducts();
 console.log(products);
 
+
+
 function displayRandomProducts() {
-    let randomGoatIndex1 = Math.floor(Math.random() * products.length);
-    let randomGoatIndex2 = Math.floor(Math.random() * products.length);
-    let randomGoatIndex3 = Math.floor(Math.random() * products.length);
-
-    while(randomGoatIndex1 === randomGoatIndex2 || randomGoatIndex1 === randomGoatIndex3 || randomGoatIndex2 === randomGoatIndex3) {
-        randomGoatIndex2 = Math.floor(Math.random() * products.length);
-        randomGoatIndex3 = Math.floor(Math.random() * products.length);
-    }
-
-    image1Element.src = products[randomGoatIndex1].src;
-    image1Element.alt = products[randomGoatIndex1].name;
-    image2Element.src = products[randomGoatIndex2].src;
-    image2Element.alt = products[randomGoatIndex2].name;
-    image3Element.src = products[randomGoatIndex3].src;
-    image3Element.alt = products[randomGoatIndex3].name;
-    products[randomGoatIndex1].timesSeen++;
-    products[randomGoatIndex2].timesSeen++;
-    products[randomGoatIndex3].timesSeen++;
-
     roundCount++;
 
-    if (roundCount > maxRounds) {
-        alert('The session is over. Click the button to view the results.');
-        productContainer.removeEventListener('click', handleProductClicks);
-        resultsElement.addEventListener('click', viewResults);
-    }
+    let randomProductIndex1 = Math.floor(Math.random() * products.length);
+    let randomProductIndex2 = Math.floor(Math.random() * products.length);
+    let randomProductIndex3 = Math.floor(Math.random() * products.length);
+
+    while (randomIndex.includes(randomProductIndex1)) {
+        randomProductIndex1 = Math.floor(Math.random() * products.length);
+     }
+    randomIndex[0] = randomProductIndex1;
+
+    while (randomIndex.includes(randomProductIndex2) || randomProductIndex2 === randomProductIndex1) {
+        randomProductIndex2 = Math.floor(Math.random() * products.length);
+     }
+    randomIndex[1] = randomProductIndex2;
+
+    while (randomIndex.includes(randomProductIndex3) || randomProductIndex3 === randomProductIndex1 || randomProductIndex3 === randomProductIndex2) {
+        randomProductIndex3 = Math.floor(Math.random() * products.length);
+     }
+
+    randomIndex[2] = randomProductIndex3;
+
+    console.log(randomIndex);
+
+    image1Element.src = products[randomProductIndex1].src;
+    image1Element.alt = products[randomProductIndex1].name;
+    image2Element.src = products[randomProductIndex2].src;
+    image2Element.alt = products[randomProductIndex2].name;
+    image3Element.src = products[randomProductIndex3].src;
+    image3Element.alt = products[randomProductIndex3].name;
+    products[randomProductIndex1].timesSeen++;
+    products[randomProductIndex2].timesSeen++;
+    products[randomProductIndex3].timesSeen++;
 }
 
 function handleProductClicks(event) {
@@ -79,26 +92,63 @@ function handleProductClicks(event) {
         }
     }
     console.log(products);
+
+    if (roundCount >= maxRounds) {
+        alert('The session is over. Click the button to view the results.');
+        productContainer.removeEventListener('click', handleProductClicks);
+        chartButton.addEventListener('click', viewResults);
+    } else {
     displayRandomProducts();
+    }
 }
 
 function viewResults() {
     if (!buttonClicked) {
-        let listElement = document.createElement('ul');
-
-        for (let i = 0; i < products.length; i++) {
-            createHTML('li', products[i].name + ' had ' + products[i].timesClicked + ' votes, and was seen ' + products[i].timesSeen + ' times', listElement);
-        }
-        resultsElement.appendChild(listElement);
-    }
-
-    function createHTML(elementToCreate, contentToAdd, elementToAddTo) {
-        let element = document.createElement(elementToCreate);
-        element.textContent += contentToAdd;
-        elementToAddTo.appendChild(element);
+        chartContainer.classList.add('chart-with-border');
+        createProductChart();
     }
     buttonClicked = true;
 }
+
+function createProductChart() {
+    const totalProductClicks = [];
+    const totalProductViews = [];
+    const productNames = [];
+
+    for (let i = 0; i < products.length; i++) {
+      let currentProduct = products[i];
+      productNames.push(currentProduct.name);
+      totalProductClicks.push(currentProduct.timesClicked);
+      totalProductViews.push(currentProduct.timesSeen);
+    }
+    console.log(totalProductViews);
+    return new Chart(chartCanvas, {
+      type: 'bar',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: 'Times Seen',
+          data: totalProductViews,
+          borderWidth: 1
+        }, {
+          label: 'Times Clicked',
+          data: totalProductClicks,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 10
+          }
+        }
+      }
+    });
+  }
+
 productContainer.addEventListener('click', handleProductClicks);
+
+
 
 
