@@ -9,7 +9,7 @@ const productContainer = document.getElementById('product-container');
 const resultsElement = document.getElementById('results');
 
 let roundCount = 0;
-const maxRounds = 25;
+const maxRounds = 2;
 let buttonClicked = false;
 
 function Product(name, src) {
@@ -66,6 +66,7 @@ function displayRandomProducts() {
     roundCount++;
 
     if (roundCount > maxRounds) {
+        alert('The session is over. Click the button to view the results.');
         productContainer.removeEventListener('click', handleProductClicks);
         resultsElement.addEventListener('click', viewResults);
     }
