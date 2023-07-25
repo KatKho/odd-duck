@@ -9,7 +9,7 @@ const productContainer = document.getElementById('product-container');
 const resultsElement = document.getElementById('results');
 
 let roundCount = 0;
-const maxRounds = 25;
+const maxRounds = 3;
 let buttonClicked = false;
 
 function Product(name, src) {
@@ -43,33 +43,54 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 displayRandomProducts();
 console.log(products);
 
+
+
 function displayRandomProducts() {
-    let randomGoatIndex1 = Math.floor(Math.random() * products.length);
-    let randomGoatIndex2 = Math.floor(Math.random() * products.length);
-    let randomGoatIndex3 = Math.floor(Math.random() * products.length);
-
-    while(randomGoatIndex1 === randomGoatIndex2 || randomGoatIndex1 === randomGoatIndex3 || randomGoatIndex2 === randomGoatIndex3) {
-        randomGoatIndex2 = Math.floor(Math.random() * products.length);
-        randomGoatIndex3 = Math.floor(Math.random() * products.length);
-    }
-
-    image1Element.src = products[randomGoatIndex1].src;
-    image1Element.alt = products[randomGoatIndex1].name;
-    image2Element.src = products[randomGoatIndex2].src;
-    image2Element.alt = products[randomGoatIndex2].name;
-    image3Element.src = products[randomGoatIndex3].src;
-    image3Element.alt = products[randomGoatIndex3].name;
-    products[randomGoatIndex1].timesSeen++;
-    products[randomGoatIndex2].timesSeen++;
-    products[randomGoatIndex3].timesSeen++;
-
     roundCount++;
 
-    if (roundCount > maxRounds) {
-        alert('The session is over. Click the button to view the results.');
-        productContainer.removeEventListener('click', handleProductClicks);
-        resultsElement.addEventListener('click', viewResults);
+    let randomProductIndex1 = Math.floor(Math.random() * products.length);
+    let randomProductIndex2 = Math.floor(Math.random() * products.length);
+    let randomProductIndex3 = Math.floor(Math.random() * products.length);
+
+    // function uniqueProduct(productImage) {
+    //     while (productImage === products[randomProductIndex1].name || productImage === products[randomProductIndex2].name || productImage === products[randomProductIndex3].name){
+    //     let randomIndex = 0;
+    //     randomIndex = Math.floor(Math.random() * products.length);
+    //     return randomIndex;
+    //     }
+    // }
+
+    // randomProductIndex1 = uniqueProduct(image1Element.alt);
+    // randomProductIndex2 = uniqueProduct(image2Element.alt);
+    // randomProductIndex3 = uniqueProduct(image3Element.alt);
+
+
+    while (image1Element.alt === products[randomProductIndex1].name || image1Element.alt === products[randomProductIndex2].name || image1Element.alt === products[randomProductIndex3].name) {
+        randomProductIndex1 = Math.floor(Math.random() * products.length);
     }
+
+    while (image2Element.alt === products[randomProductIndex1].name || image2Element.alt === products[randomProductIndex2].name || image2Element.alt === products[randomProductIndex3].name) {
+        randomProductIndex1 = Math.floor(Math.random() * products.length);
+    }
+
+    while (image3Element.alt === products[randomProductIndex1].name || image3Element.alt === products[randomProductIndex2].name || image3Element.alt === products[randomProductIndex3].name) {
+        randomProductIndex1 = Math.floor(Math.random() * products.length);
+    }
+
+    while(randomProductIndex1 === randomProductIndex2 || randomProductIndex1 === randomProductIndex3 || randomProductIndex2 === randomProductIndex3) {
+        randomProductIndex2 = Math.floor(Math.random() * products.length);
+        randomProductIndex3 = Math.floor(Math.random() * products.length);
+    }
+
+    image1Element.src = products[randomProductIndex1].src;
+    image1Element.alt = products[randomProductIndex1].name;
+    image2Element.src = products[randomProductIndex2].src;
+    image2Element.alt = products[randomProductIndex2].name;
+    image3Element.src = products[randomProductIndex3].src;
+    image3Element.alt = products[randomProductIndex3].name;
+    products[randomProductIndex1].timesSeen++;
+    products[randomProductIndex2].timesSeen++;
+    products[randomProductIndex3].timesSeen++;
 }
 
 function handleProductClicks(event) {
@@ -79,7 +100,14 @@ function handleProductClicks(event) {
         }
     }
     console.log(products);
+
+    if (roundCount >= maxRounds) {
+        alert('The session is over. Click the button to view the results.');
+        productContainer.removeEventListener('click', handleProductClicks);
+        resultsElement.addEventListener('click', viewResults);
+    } else {
     displayRandomProducts();
+    }
 }
 
 function viewResults() {
@@ -92,13 +120,17 @@ function viewResults() {
         resultsElement.appendChild(listElement);
     }
 
-    function createHTML(elementToCreate, contentToAdd, elementToAddTo) {
-        let element = document.createElement(elementToCreate);
-        element.textContent += contentToAdd;
-        elementToAddTo.appendChild(element);
-    }
     buttonClicked = true;
 }
+
+function createHTML(elementToCreate, contentToAdd, elementToAddTo) {
+    let element = document.createElement(elementToCreate);
+    element.textContent += contentToAdd;
+    elementToAddTo.appendChild(element);
+}
+
 productContainer.addEventListener('click', handleProductClicks);
+
+
 
 
