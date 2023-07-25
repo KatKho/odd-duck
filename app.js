@@ -6,10 +6,14 @@ const image1Element = document.getElementById('image1');
 const image2Element = document.getElementById('image2');
 const image3Element = document.getElementById('image3');
 const productContainer = document.getElementById('product-container');
-const resultsElement = document.getElementById('results');
+const chartCanvas = document.getElementById('myChart');
+const chartButton = document.getElementById('view-results');
+const chartContainer = document.getElementById('chart-container');
 
+
+let randomIndex = [];
 let roundCount = 0;
-const maxRounds = 3;
+const maxRounds = 25;
 let buttonClicked = false;
 
 function Product(name, src) {
@@ -52,35 +56,23 @@ function displayRandomProducts() {
     let randomProductIndex2 = Math.floor(Math.random() * products.length);
     let randomProductIndex3 = Math.floor(Math.random() * products.length);
 
-    // function uniqueProduct(productImage) {
-    //     while (productImage === products[randomProductIndex1].name || productImage === products[randomProductIndex2].name || productImage === products[randomProductIndex3].name){
-    //     let randomIndex = 0;
-    //     randomIndex = Math.floor(Math.random() * products.length);
-    //     return randomIndex;
-    //     }
-    // }
-
-    // randomProductIndex1 = uniqueProduct(image1Element.alt);
-    // randomProductIndex2 = uniqueProduct(image2Element.alt);
-    // randomProductIndex3 = uniqueProduct(image3Element.alt);
-
-
-    while (image1Element.alt === products[randomProductIndex1].name || image1Element.alt === products[randomProductIndex2].name || image1Element.alt === products[randomProductIndex3].name) {
+    while (randomIndex.includes(randomProductIndex1)) {
         randomProductIndex1 = Math.floor(Math.random() * products.length);
-    }
+     }
+    randomIndex[0] = randomProductIndex1;
 
-    while (image2Element.alt === products[randomProductIndex1].name || image2Element.alt === products[randomProductIndex2].name || image2Element.alt === products[randomProductIndex3].name) {
-        randomProductIndex1 = Math.floor(Math.random() * products.length);
-    }
-
-    while (image3Element.alt === products[randomProductIndex1].name || image3Element.alt === products[randomProductIndex2].name || image3Element.alt === products[randomProductIndex3].name) {
-        randomProductIndex1 = Math.floor(Math.random() * products.length);
-    }
-
-    while(randomProductIndex1 === randomProductIndex2 || randomProductIndex1 === randomProductIndex3 || randomProductIndex2 === randomProductIndex3) {
+    while (randomIndex.includes(randomProductIndex2) || randomProductIndex2 === randomProductIndex1) {
         randomProductIndex2 = Math.floor(Math.random() * products.length);
+     }
+    randomIndex[1] = randomProductIndex2;
+
+    while (randomIndex.includes(randomProductIndex3) || randomProductIndex3 === randomProductIndex1 || randomProductIndex3 === randomProductIndex2) {
         randomProductIndex3 = Math.floor(Math.random() * products.length);
-    }
+     }
+
+    randomIndex[2] = randomProductIndex3;
+
+    console.log(randomIndex);
 
     image1Element.src = products[randomProductIndex1].src;
     image1Element.alt = products[randomProductIndex1].name;
@@ -104,7 +96,7 @@ function handleProductClicks(event) {
     if (roundCount >= maxRounds) {
         alert('The session is over. Click the button to view the results.');
         productContainer.removeEventListener('click', handleProductClicks);
-        resultsElement.addEventListener('click', viewResults);
+        chartButton.addEventListener('click', viewResults);
     } else {
     displayRandomProducts();
     }
@@ -112,22 +104,48 @@ function handleProductClicks(event) {
 
 function viewResults() {
     if (!buttonClicked) {
-        let listElement = document.createElement('ul');
-
-        for (let i = 0; i < products.length; i++) {
-            createHTML('li', products[i].name + ' had ' + products[i].timesClicked + ' votes, and was seen ' + products[i].timesSeen + ' times', listElement);
-        }
-        resultsElement.appendChild(listElement);
+        chartContainer.classList.add('chart-with-border');
+        createProductChart();
     }
-
     buttonClicked = true;
 }
 
-function createHTML(elementToCreate, contentToAdd, elementToAddTo) {
-    let element = document.createElement(elementToCreate);
-    element.textContent += contentToAdd;
-    elementToAddTo.appendChild(element);
-}
+function createProductChart() {
+    const totalProductClicks = [];
+    const totalProductViews = [];
+    const productNames = [];
+
+    for (let i = 0; i < products.length; i++) {
+      let currentProduct = products[i];
+      productNames.push(currentProduct.name);
+      totalProductClicks.push(currentProduct.timesClicked);
+      totalProductViews.push(currentProduct.timesSeen);
+    }
+    console.log(totalProductViews);
+    return new Chart(chartCanvas, {
+      type: 'bar',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: 'Times Seen',
+          data: totalProductViews,
+          borderWidth: 1
+        }, {
+          label: 'Times Clicked',
+          data: totalProductClicks,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 10
+          }
+        }
+      }
+    });
+  }
 
 productContainer.addEventListener('click', handleProductClicks);
 
