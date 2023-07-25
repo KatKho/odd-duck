@@ -10,6 +10,7 @@ const resultsElement = document.getElementById('results');
 
 let roundCount = 0;
 const maxRounds = 25;
+let buttonClicked = false;
 
 function Product(name, src) {
     this.name = name;
@@ -48,8 +49,8 @@ function displayRandomProducts() {
     let randomGoatIndex3 = Math.floor(Math.random() * products.length);
 
     while(randomGoatIndex1 === randomGoatIndex2 || randomGoatIndex1 === randomGoatIndex3 || randomGoatIndex2 === randomGoatIndex3) {
-      randomGoatIndex2 = Math.floor(Math.random() * products.length);
-      randomGoatIndex3 = Math.floor(Math.random() * products.length);
+        randomGoatIndex2 = Math.floor(Math.random() * products.length);
+        randomGoatIndex3 = Math.floor(Math.random() * products.length);
     }
 
     image1Element.src = products[randomGoatIndex1].src;
@@ -65,34 +66,37 @@ function displayRandomProducts() {
     roundCount++;
 
     if (roundCount > maxRounds) {
-      productContainer.removeEventListener('click', handleProductClicks);
-      resultsElement.addEventListener('click', viewResults);
+        productContainer.removeEventListener('click', handleProductClicks);
+        resultsElement.addEventListener('click', viewResults);
     }
-  }
+}
 
 function handleProductClicks(event) {
     for (let i = 0; i < products.length; i++) {
-      if (products[i].name === event.target.alt) {
-        products[i].timesClicked++;
-      }
+        if (products[i].name === event.target.alt) {
+            products[i].timesClicked++;
+        }
     }
     console.log(products);
     displayRandomProducts();
 }
 
 function viewResults() {
-    let listElement = document.createElement('ul');
+    if (!buttonClicked) {
+        let listElement = document.createElement('ul');
 
-    for (let i = 0; i < products.length; i++) {
-     createHTML('li', products[i].name + ' had ' + products[i].timesClicked + ' votes, and was seen ' + products[i].timesSeen + ' times', listElement);
+        for (let i = 0; i < products.length; i++) {
+            createHTML('li', products[i].name + ' had ' + products[i].timesClicked + ' votes, and was seen ' + products[i].timesSeen + ' times', listElement);
+        }
+        resultsElement.appendChild(listElement);
     }
-    resultsElement.appendChild(listElement);
-}
 
-function createHTML(elementToCreate, contentToAdd, elementToAddTo) {
-    let element = document.createElement(elementToCreate);
-    element.textContent += contentToAdd;
-    elementToAddTo.appendChild(element);
+    function createHTML(elementToCreate, contentToAdd, elementToAddTo) {
+        let element = document.createElement(elementToCreate);
+        element.textContent += contentToAdd;
+        elementToAddTo.appendChild(element);
+        buttonClicked = true;
+    }
 }
 productContainer.addEventListener('click', handleProductClicks);
 
