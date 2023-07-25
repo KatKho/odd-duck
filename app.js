@@ -96,8 +96,8 @@ function viewResults() {
         let element = document.createElement(elementToCreate);
         element.textContent += contentToAdd;
         elementToAddTo.appendChild(element);
-        buttonClicked = true;
     }
+    buttonClicked = true;
 }
 productContainer.addEventListener('click', handleProductClicks);
 
