@@ -9,7 +9,7 @@ const productContainer = document.getElementById('product-container');
 const resultsElement = document.getElementById('results');
 
 let roundCount = 0;
-const maxRounds = 2;
+const maxRounds = 25;
 let buttonClicked = false;
 
 function Product(name, src) {
