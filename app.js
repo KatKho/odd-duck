@@ -58,18 +58,18 @@ function displayRandomProducts() {
 
     while (randomIndex.includes(randomProductIndex1)) {
         randomProductIndex1 = Math.floor(Math.random() * products.length);
-     }
-    randomIndex[0] = randomProductIndex1;
+    }
 
     while (randomIndex.includes(randomProductIndex2) || randomProductIndex2 === randomProductIndex1) {
         randomProductIndex2 = Math.floor(Math.random() * products.length);
-     }
-    randomIndex[1] = randomProductIndex2;
+    }
 
     while (randomIndex.includes(randomProductIndex3) || randomProductIndex3 === randomProductIndex1 || randomProductIndex3 === randomProductIndex2) {
         randomProductIndex3 = Math.floor(Math.random() * products.length);
-     }
+    }
 
+    randomIndex[0] = randomProductIndex1;
+    randomIndex[1] = randomProductIndex2;
     randomIndex[2] = randomProductIndex3;
 
     console.log(randomIndex);
