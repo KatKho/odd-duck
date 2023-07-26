@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 'use strict';
 
-const products = [];
+const products = load();
 const image1Element = document.getElementById('image1');
 const image2Element = document.getElementById('image2');
 const image3Element = document.getElementById('image3');
@@ -9,7 +9,6 @@ const productContainer = document.getElementById('product-container');
 const chartCanvas = document.getElementById('myChart');
 const chartButton = document.getElementById('view-results');
 const chartContainer = document.getElementById('chart-container');
-
 
 let randomIndex = [];
 let roundCount = 0;
@@ -21,34 +20,12 @@ function Product(name, src) {
     this.src = src;
     this.timesClicked = 0;
     this.timesSeen = 0;
-    products.push(this);
+    // products.push(this);
   }
 
-new Product('bag', 'img/bag.jpg');
-new Product('banana', 'img/banana.jpg');
-new Product('bathroom', 'img/bathroom.jpg');
-new Product('boots', 'img/boots.jpg');
-new Product('breakfast', 'img/breakfast.jpg');
-new Product('bubblegum', 'img/bubblegum.jpg');
-new Product('chair', 'img/chair.jpg');
-new Product('cthulhu', 'img/cthulhu.jpg');
-new Product('dog-duck', 'img/dog-duck.jpg');
-new Product('dragon', 'img/dragon.jpg');
-new Product('pen', 'img/pen.jpg');
-new Product('pet-sweep', 'img/pet-sweep.jpg');
-new Product('scissors', 'img/scissors.jpg');
-new Product('shark', 'img/shark.jpg');
-new Product('sweep', 'img/sweep.png');
-new Product('tauntaun', 'img/tauntaun.jpg');
-new Product('unicorn', 'img/unicorn.jpg');
-new Product('water-can', 'img/water-can.jpg');
-new Product('wine-glass', 'img/wine-glass.jpg');
 
 displayRandomProducts();
-console.log(products);
-
-
-
+// console.log(products);
 function displayRandomProducts() {
     roundCount++;
 
@@ -72,7 +49,7 @@ function displayRandomProducts() {
     randomIndex[1] = randomProductIndex2;
     randomIndex[2] = randomProductIndex3;
 
-    console.log(randomIndex);
+    // console.log(randomIndex);
 
     image1Element.src = products[randomProductIndex1].src;
     image1Element.alt = products[randomProductIndex1].name;
@@ -97,8 +74,10 @@ function handleProductClicks(event) {
         alert('The session is over. Click the button to view the results.');
         productContainer.removeEventListener('click', handleProductClicks);
         chartButton.addEventListener('click', viewResults);
+        save();
     } else {
     displayRandomProducts();
+    save();
     }
 }
 
@@ -121,7 +100,7 @@ function createProductChart() {
       totalProductClicks.push(currentProduct.timesClicked);
       totalProductViews.push(currentProduct.timesSeen);
     }
-    console.log(totalProductViews);
+    // console.log(totalProductViews);
     return new Chart(chartCanvas, {
       type: 'bar',
       data: {
@@ -149,6 +128,39 @@ function createProductChart() {
 
 productContainer.addEventListener('click', handleProductClicks);
 
+// set all click tracking data into localStorage
+function save() {
+    let valuesToStore = JSON.stringify(products);
+    localStorage.setItem('chartData', valuesToStore);
+    console.log(localStorage.chartData);
+}
 
-
-
+function load() {
+    let rawData = localStorage.getItem('chartData');
+    let chartObject = JSON.parse(rawData);
+    // if we need Contructor functionality -> loop and recreate our Goat Objects;
+    if (!chartObject) {
+        return [
+            new Product('bag', 'img/bag.jpg'),
+            new Product('banana', 'img/banana.jpg'),
+            new Product('bathroom', 'img/bathroom.jpg'),
+            new Product('boots', 'img/boots.jpg'),
+            new Product('breakfast', 'img/breakfast.jpg'),
+            new Product('bubblegum', 'img/bubblegum.jpg'),
+            new Product('chair', 'img/chair.jpg'),
+            new Product('cthulhu', 'img/cthulhu.jpg'),
+            new Product('dog-duck', 'img/dog-duck.jpg'),
+            new Product('dragon', 'img/dragon.jpg'),
+            new Product('pen', 'img/pen.jpg'),
+            new Product('pet-sweep', 'img/pet-sweep.jpg'),
+            new Product('scissors', 'img/scissors.jpg'),
+            new Product('shark', 'img/shark.jpg'),
+            new Product('sweep', 'img/sweep.png'),
+            new Product('tauntaun', 'img/tauntaun.jpg'),
+            new Product('unicorn', 'img/unicorn.jpg'),
+            new Product('water-can', 'img/water-can.jpg'),
+            new Product('wine-glass', 'img/wine-glass.jpg')
+      ];
+    }
+    return chartObject;
+}
