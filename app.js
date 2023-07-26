@@ -74,7 +74,6 @@ function handleProductClicks(event) {
         alert('The session is over. Click the button to view the results.');
         productContainer.removeEventListener('click', handleProductClicks);
         chartButton.addEventListener('click', viewResults);
-        save();
     } else {
     displayRandomProducts();
     save();

@@ -2,4 +2,4 @@
 
 [Link to my project](https://katkho.github.io/odd-duck/)
 
-![Screenshot](img/Screenshot.png)
+![Screenshot](img/Screenshot-1.png)
