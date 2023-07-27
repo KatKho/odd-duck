@@ -35,7 +35,7 @@ header {
 button {
     font-size: 30px;
     color: #4C4B16;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     width: 250px;
     background-color: #E7B10A;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -82,3 +82,6 @@ main{
   .chart-with-border {
     border: thin solid #898121;
   }
+
+  
+

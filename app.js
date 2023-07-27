@@ -107,11 +107,13 @@ function createProductChart() {
         datasets: [{
           label: 'Times Seen',
           data: totalProductViews,
-          borderWidth: 1
+          borderWidth: 1,
+          backgroundColor: '#898121', // Change this color as needed
         }, {
           label: 'Times Clicked',
           data: totalProductClicks,
-          borderWidth: 1
+          borderWidth: 1,
+          backgroundColor: '#E7B10A', // Change this color as needed
         }]
       },
       options: {
